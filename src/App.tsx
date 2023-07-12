@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Text, FontWeights, ITextStyles, initializeIcons, Pivot, PivotItem } from '@fluentui/react';
 import { Nav} from '@fluentui/react/lib/Nav';
 import { GroupCard, SmCard } from './Cards'
@@ -162,6 +162,23 @@ export const App: React.FunctionComponent = () => {
     Region: null, Area:null
   })
 
+  useEffect(()=> {
+    const pollapi = async () => {
+      fetch("/api/wakeup")
+      .then(response => {
+        if (response.ok) {
+          console.log("api up");
+        } else {
+          console.log("api down");
+        }
+      })
+      .catch(error => {
+        console.error("api really down:", error);
+      })
+      setTimeout(pollapi, 5000)
+    }
+    pollapi();
+  }, [])
   return (
     <div>
       <Stack horizontalAlign="center" verticalAlign="start">
