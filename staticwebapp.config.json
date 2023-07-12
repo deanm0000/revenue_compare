@@ -1,0 +1,50 @@
+{
+    "auth": {
+        "rolesSource": "/api/GetRoles",
+        "identityProviders": {
+          "azureActiveDirectory": {
+            "userDetailsClaim": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+            "registration": {
+              "openIdIssuer": "https://login.microsoftonline.com/c5d35081-d88e-4d27-8c32-8cc2e4c61c12",
+              "clientIdSettingName": "02a37933-9532-4ea5-83c2-488c754b4a78",
+              "clientSecretSettingName": "x-18Q~708U2t8dFgzU-99OJqwDoZ8WRFH~LKLduO"
+            },
+            "login": {
+              "loginParameters": [
+                "resource=https://graph.microsoft.com"
+              ]
+            }
+          }
+        }
+      },
+
+    "trailingSlash": "auto",
+    "routes": [
+      {
+        "route": "/*",
+        "allowedRoles": ["authenticated"]
+      }
+    ],
+    "navigationFallback": {
+      "rewrite": "index.html",
+      "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+    },
+    "responseOverrides": {
+      "400": {
+        "rewrite": "/invalid-invitation-error.html"
+      },
+      "401": {
+        "redirect": "/login",
+        "statusCode": 302
+      },
+      "403": {
+        "rewrite": "/custom-forbidden-page.html"
+      },
+      "404": {
+        "rewrite": "/404.html"
+      }
+    },
+    "mimeTypes": {
+      ".json": "text/json"
+    }
+  }
