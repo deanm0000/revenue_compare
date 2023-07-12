@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 }
+
+.groupcardtitle {
+  font-weight: bold;
+  font-size: calc(9px + 2vmin)
+}
+
+.groupcard {
+  max-width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px
+}
+
+.smcard {
+  max-width: 100%;
+  padding: 10px
+}
+.droplabel {
+  display:inline-block
+}
+
+.ms-Grid-row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.subtitle {
+  margin: 0px;
+  padding: 0px;
+  font-weight: bold;
+  margin-bottom: -1em;
+}
+
+.bordered {
+  border: 1px solid;
+  padding: 0.5em
+}
