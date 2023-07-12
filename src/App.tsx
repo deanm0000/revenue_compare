@@ -167,7 +167,7 @@ export const App: React.FunctionComponent = () => {
       fetch("/api/wakeup")
       .then(response => {
         if (response.ok) {
-          console.log("api up");
+          console.log("api up", response.text());
         } else {
           console.log("api down");
         }

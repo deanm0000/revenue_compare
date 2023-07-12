@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Compare/Estimate app",
+  "name": "Baywa Revenue Estimator and Comparison",
   "icons": [
     {
       "src": "favicon.ico",
