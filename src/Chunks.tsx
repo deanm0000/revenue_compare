@@ -17,7 +17,7 @@ export const ProdLoad: React.FC<paramsprops> = ({ allParams, setAllParams }) => 
     const [availCols, setAvailCols] = useState([{key:'',text:''}]);
     const [initCol, setinitCol] = useState<string | null>(null);
     useEffect(() => {
-        fetch("http://localhost:60242/api/prodfiles", {
+        fetch("/api/prodfiles", {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
@@ -28,7 +28,7 @@ export const ProdLoad: React.FC<paramsprops> = ({ allParams, setAllParams }) => 
       }, [])
     const fileDropPick = (e: React.FormEvent<HTMLDivElement>, i?: IDropdownOption) => {
         if (i !== undefined) {
-            fetch("http://localhost:60242/api/prodcols", {
+            fetch("/api/prodcols", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -476,7 +476,7 @@ export const EnergyCol: React.FC<EnergyColprops> = ({ enPicks, setEnPicks }) => 
         }
     }
     useEffect(() => {
-        fetch("http://localhost:60242/api/choices/energy_choices", {
+        fetch("/api/choices/energy_choices", {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
@@ -611,7 +611,7 @@ export const CapCol: React.FC<CapColprops> = ({ capPicks, setCapPicks, enPicks }
         }
     }
     useEffect(() => {
-        fetch("http://localhost:60242/api/choices/cap_choices", {
+        fetch("/api/choices/cap_choices", {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
@@ -770,7 +770,7 @@ export const RecCol: React.FC<RecColprops> = ({ recPicks, setRecPicks, enPicks }
         }
     }
     useEffect(() => {
-        fetch("http://localhost:60242/api/choices/rec_choices", {
+        fetch("/api/choices/rec_choices", {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
@@ -927,7 +927,7 @@ export const ElccCol: React.FC<ElccColprops> = ({ elccPicks, setElccPicks, enPic
         }
     }
     useEffect(() => {
-        fetch("http://localhost:60242/api/choices/elcc_choices", {
+        fetch("/api/choices/elcc_choices", {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
