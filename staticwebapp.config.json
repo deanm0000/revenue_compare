@@ -21,12 +21,30 @@
     "trailingSlash": "auto",
     "routes": [
       {
+        "route": "/login",
+        "rewrite": "/.auth/login/aad",
+        "allowedRoles": ["anonymous", "authenticated"]
+      },
+      {
+        "route": "/.auth/login/github",
+        "statusCode": 404
+      },
+      {
+        "route": "/.auth/login/twitter",
+        "statusCode": 404
+      },
+      {
+        "route": "/logout",
+        "redirect": "/.auth/logout",
+        "allowedRoles": ["anonymous", "authenticated"]
+      },
+      {
         "route": "/*",
         "allowedRoles": ["authenticated"]
       }
     ],
     "navigationFallback": {
-      "rewrite": "index.html",
+      "rewrite": "/index.html",
       "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
     },
     "responseOverrides": {
@@ -36,15 +54,6 @@
       "401": {
         "redirect": "/login",
         "statusCode": 302
-      },
-      "403": {
-        "rewrite": "/custom-forbidden-page.html"
-      },
-      "404": {
-        "rewrite": "/404.html"
       }
-    },
-    "mimeTypes": {
-      ".json": "text/json"
     }
   }
