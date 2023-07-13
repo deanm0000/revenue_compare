@@ -1,11 +1,9 @@
 {
     "auth": {
-        "rolesSource": "/api/GetRoles",
         "identityProviders": {
           "azureActiveDirectory": {
-            "userDetailsClaim": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
             "registration": {
-              "openIdIssuer": "https://login.microsoftonline.com/c5d35081-d88e-4d27-8c32-8cc2e4c61c12",
+              "openIdIssuer": "https://login.microsoftonline.com/c5d35081-d88e-4d27-8c32-8cc2e4c61c12/v2.0",
               "clientIdSettingName": "02a37933-9532-4ea5-83c2-488c754b4a78",
               "clientSecretSettingName": "x-18Q~708U2t8dFgzU-99OJqwDoZ8WRFH~LKLduO"
             },
@@ -22,7 +20,7 @@
     "routes": [
       {
         "route": "/login",
-        "rewrite": "/.auth/login/aad",
+        "rewrite": "/.auth/login/aad/callback",
         "allowedRoles": ["anonymous", "authenticated"]
       },
       {
@@ -35,7 +33,7 @@
       },
       {
         "route": "/logout",
-        "redirect": "/.auth/logout",
+        "redirect": "/.auth/logout/aad/callback",
         "allowedRoles": ["anonymous", "authenticated"]
       },
       {
@@ -55,5 +53,8 @@
         "redirect": "/login",
         "statusCode": 302
       }
+    },
+    "mimeTypes": {
+      ".json": "text/json"
     }
   }
