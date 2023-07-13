@@ -6,11 +6,6 @@
               "openIdIssuer": "https://login.microsoftonline.com/c5d35081-d88e-4d27-8c32-8cc2e4c61c12/v2.0",
               "clientIdSettingName": "02a37933-9532-4ea5-83c2-488c754b4a78",
               "clientSecretSettingName": "x-18Q~708U2t8dFgzU-99OJqwDoZ8WRFH~LKLduO"
-            },
-            "login": {
-              "loginParameters": [
-                "resource=https://graph.microsoft.com"
-              ]
             }
           }
         }
@@ -19,8 +14,16 @@
     "trailingSlash": "auto",
     "routes": [
       {
+        "route": "/.auth/login/aad",
+        "allowedRoles": ["anonymous", "authenticated"]
+      },
+      {
+        "route": "/.auth/login/aad/callback",
+        "allowedRoles": ["anonymous", "authenticated"]
+      },
+      {
         "route": "/login",
-        "rewrite": "/.auth/login/aad/callback",
+        "rewrite": "/.auth/login/aad",
         "allowedRoles": ["anonymous", "authenticated"]
       },
       {
@@ -33,7 +36,7 @@
       },
       {
         "route": "/logout",
-        "redirect": "/.auth/logout/aad/callback",
+        "redirect": "/.auth/logout/aad",
         "allowedRoles": ["anonymous", "authenticated"]
       },
       {
