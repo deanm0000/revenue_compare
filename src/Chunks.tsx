@@ -33,7 +33,7 @@ export const ProdLoad: React.FC<paramspropsapi> = ({ allParams, setAllParams, ap
       }, [])
     const fileDropPick = (e: React.FormEvent<HTMLDivElement>, i?: IDropdownOption) => {
         if (i !== undefined) {
-            fetch(apiBase.concat("/api/prodcols"), {
+            fetch(apiBase.concat("/prodcols"), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
