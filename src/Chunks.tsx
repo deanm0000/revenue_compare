@@ -13,22 +13,27 @@ interface paramsprops {
     allParams: any;
 }
 
-export const ProdLoad: React.FC<paramsprops> = ({ allParams, setAllParams }) => {
+interface paramspropsapi extends paramsprops {
+    apiBase: string
+}
+
+export const ProdLoad: React.FC<paramspropsapi> = ({ allParams, setAllParams, apiBase }) => {
     const [availCols, setAvailCols] = useState([{key:'',text:''}]);
     const [initCol, setinitCol] = useState<string | null>(null);
-    useEffect(() => {
-        fetch("/api/prodfiles", {
+    
+    useEffect(() => { 
+        fetch(apiBase.concat("/prodfiles"), {
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
             }})
         .then(response=>response.json())
         .then(data=>dropify(data))
         .then(dlist=>setDropFiles(dlist))
+        // eslint-disable-next-line
       }, [])
     const fileDropPick = (e: React.FormEvent<HTMLDivElement>, i?: IDropdownOption) => {
         if (i !== undefined) {
-            fetch("/api/prodcols", {
+            fetch(apiBase.concat("/api/prodcols"), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -476,11 +481,6 @@ export const EnergyCol: React.FC<EnergyColprops> = ({ enPicks, setEnPicks }) => 
         }
     }
     useEffect(() => {
-        // fetch("/api/choices/energy_choices", {
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
-        //     }})
         fetch("https://stsynussp.blob.core.windows.net/comparecurves/choices/energy_choices.json?sv=2021-12-02&st=2023-07-13T10%3A54%3A11Z&se=2040-07-14T10%3A54%3A00Z&sr=b&sp=r&sig=Jj4hv4gU2D8jElKzH4hIyhZKU3Iv5G3uUpUB%2BIMyM3o%3D")
         .then(response=>response.json())
         .then(data=>{
@@ -612,11 +612,7 @@ export const CapCol: React.FC<CapColprops> = ({ capPicks, setCapPicks, enPicks }
         }
     }
     useEffect(() => {
-        // fetch("/api/choices/cap_choices", {
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
-        //     }})
+
         fetch("https://stsynussp.blob.core.windows.net/comparecurves/choices/cap_choices.json?sv=2021-12-02&st=2023-07-13T10%3A54%3A58Z&se=2040-07-14T10%3A54%3A00Z&sr=b&sp=r&sig=Bw7laXtHFn0d65Y49haiYT1ULTf5ugEGbCNe7wjLzmI%3D")
         .then(response=>response.json())
         .then(data=>{
@@ -772,11 +768,6 @@ export const RecCol: React.FC<RecColprops> = ({ recPicks, setRecPicks, enPicks }
         }
     }
     useEffect(() => {
-        // fetch("/api/choices/rec_choices", {
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
-        //     }})
         fetch("https://stsynussp.blob.core.windows.net/comparecurves/choices/rec_choices.json?sv=2021-12-02&st=2023-07-13T10%3A55%3A40Z&se=2040-07-14T10%3A55%3A00Z&sr=b&sp=r&sig=GlxnPjF2d69daWv3XaGkR6EtcBw03F8oC9ly%2BMc6wDY%3D")
         .then(response=>response.json())
         .then(data=>{
@@ -930,11 +921,6 @@ export const ElccCol: React.FC<ElccColprops> = ({ elccPicks, setElccPicks, enPic
         }
     }
     useEffect(() => {
-        // fetch("/api/choices/elcc_choices", {
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'Access-Control-Allow-Origin': '*', // Replace with the appropriate origin
-        //     }})
         fetch("https://stsynussp.blob.core.windows.net/comparecurves/choices/elcc_choices.json?sv=2021-12-02&st=2023-07-13T10%3A56%3A12Z&se=2040-07-14T10%3A56%3A00Z&sr=b&sp=r&sig=XRreoynxStZ13yyCtjHlHpeFgbC%2Bvq9GysV7SFHbxOw%3D")
         .then(response=>response.json())
         .then(data=>{

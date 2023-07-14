@@ -116,6 +116,8 @@ interface elcctypes {
 
 export const App: React.FunctionComponent = () => {
 
+  const apiBase = process.env.NODE_ENV === "development" ? "http://localhost:60242/api" : "/api"
+
   const [allParams, setAllParams] = useState<allparamstypes>({
     maxout: '135',
     availability: '99',
@@ -164,20 +166,21 @@ export const App: React.FunctionComponent = () => {
 
   useEffect(()=> {
     const pollapi = async () => {
-      fetch("/api/wakeup")
-      .then(response => {
+      const response = await fetch(apiBase.concat("/wakeup"));
+      try {
         if (response.ok) {
-          console.log("api up", response.text());
-        } else {
-          console.log("api down");
-        }
-      })
-      .catch(error => {
+            const text = await response.text()
+            console.log("api up", text);
+          } else {
+            console.log("api down");
+          }
+        } catch (error) {
         console.error("api really down:", error);
-      })
+      }
       setTimeout(pollapi, 5000)
     }
     pollapi();
+    // eslint-disable-next-line
   }, [])
   return (
     <div>
@@ -201,7 +204,7 @@ export const App: React.FunctionComponent = () => {
                   <SmCard>
                     <Pivot>
                       <PivotItem headerText='Load Existing'>
-                        <ProdLoad allParams={allParams} setAllParams={setAllParams}/>
+                        <ProdLoad allParams={allParams} setAllParams={setAllParams} apiBase={apiBase}/>
                       </PivotItem>
                     <PivotItem headerText='New 8760'>
                       <Text>New 8760</Text>
