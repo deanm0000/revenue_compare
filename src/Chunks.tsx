@@ -4,20 +4,12 @@ import { ChoiceGroup } from '@fluentui/react/lib/ChoiceGroup';
 import { GroupCard, SmCard } from './Cards'
 import { DropdownT, NumInput, DateInput } from './Inputs'
 import { IconButton } from '@fluentui/react/lib/Button';
+import { paramsprops, paramspropsapi, basisType, inflationType, EnergyColprops, CapColprops, RecColprops, ElccColprops } from './interfaces'
 import './App.css';
 
 export const boldStyle: Partial<ITextStyles> = { root: { fontWeight: FontWeights.semibold } };
 
-interface paramsprops {
-    setAllParams: React.Dispatch<React.SetStateAction<any>>;
-    allParams: any;
-}
-
-interface paramspropsapi extends paramsprops {
-    apiBase: string
-}
-
-export const ProdLoad: React.FC<paramspropsapi> = ({ allParams, setAllParams, apiBase }) => {
+export const ProdLoad: React.FC<paramspropsapi> = ({ allParams, setAllParams, apiBase, corsmode }) => {
     const [availCols, setAvailCols] = useState([{key:'',text:''}]);
     const [initCol, setinitCol] = useState<string | null>(null);
     
@@ -25,7 +17,8 @@ export const ProdLoad: React.FC<paramspropsapi> = ({ allParams, setAllParams, ap
         fetch(apiBase.concat("/prodfiles"), {
             headers: {
               'Content-Type': 'application/json',
-            }})
+            }
+        })
         .then(response=>response.json())
         .then(data=>dropify(data))
         .then(dlist=>setDropFiles(dlist))
@@ -223,11 +216,6 @@ export const PPACard: React.FC<paramsprops> = ({ allParams, setAllParams }) => {
       </GroupCard>
     )
 }
-interface basisType {
-    startdate: Date;
-    dollar: string;
-    perc: string;
-}
 export const BasisCard: React.FC<paramsprops> = ({ allParams, setAllParams }) => {
     let element_cards: any
     const closeIcon = { iconName: "ChromeClose"}
@@ -272,14 +260,14 @@ export const BasisCard: React.FC<paramsprops> = ({ allParams, setAllParams }) =>
                     <div className="ms-Grid-col ms-sm4">
                     <NumInput
                         label="Basis Percentage"
-                        tooltip="The basis expressed as percentage of Hub price. Set to 100 for no percent change."
+                        tooltip="The basis expressed as percentage relative to the Hub price.  Above is positive or below is negative. 0 denotes no percent change."
                         onChange={(e,i)=>{
                             let allcopy:any = Object.fromEntries(Object.entries(allParams))
                             allcopy.basis[index]['perc']=i
                             setAllParams(allcopy)}
                         }
-                        min={0} 
-                        max={200}
+                        min={-100} 
+                        max={100}
                         defaultValue={allParams.basis[index]['perc']}
                         step={0.01}
                         />                             
@@ -301,10 +289,7 @@ export const BasisCard: React.FC<paramsprops> = ({ allParams, setAllParams }) =>
     </GroupCard>
     )
 }
-interface inflationType {
-    startdate: Date;
-    rate: string;
-}
+
 export const InflationCard: React.FC<paramsprops> = ({ allParams, setAllParams }) => {
     let element_cards: any
     const closeIcon = { iconName: "ChromeClose"}
@@ -457,10 +442,6 @@ export const DiscountCard: React.FC<paramsprops> = ({ allParams, setAllParams })
     </>
 )
 
-interface EnergyColprops {
-    setEnPicks: React.Dispatch<React.SetStateAction<any>>;
-    enPicks: any;
-    }
 
 export const EnergyCol: React.FC<EnergyColprops> = ({ enPicks, setEnPicks }) => {
     const [allChoices, setAllChoices] = useState();
@@ -514,7 +495,9 @@ export const EnergyCol: React.FC<EnergyColprops> = ({ enPicks, setEnPicks }) => 
     return (
     <>
     <div className="ms-Grid-row">
-        <h3 className="root-141 subtitle">Energy</h3>
+        <Text variant="large" className='bold'>Energy</Text>
+    </div>
+    <div className="ms-Grid-row">
         <Dropdown
             label="Provider"
             onChange={(e, i) => {if (i && typeof i.key==='string') {
@@ -586,11 +569,7 @@ export const EnergyCol: React.FC<EnergyColprops> = ({ enPicks, setEnPicks }) => 
 }
 
 
-interface CapColprops {
-    setCapPicks: React.Dispatch<React.SetStateAction<any>>;
-    capPicks: any;
-    enPicks: any;
-    }
+
 
 export const CapCol: React.FC<CapColprops> = ({ capPicks, setCapPicks, enPicks }) => {
     const [allChoices, setAllChoices] = useState();
@@ -612,7 +591,6 @@ export const CapCol: React.FC<CapColprops> = ({ capPicks, setCapPicks, enPicks }
         }
     }
     useEffect(() => {
-
         fetch("https://stsynussp.blob.core.windows.net/comparecurves/choices/cap_choices.json?sv=2021-12-02&st=2023-07-13T10%3A54%3A58Z&se=2040-07-14T10%3A54%3A00Z&sr=b&sp=r&sig=Bw7laXtHFn0d65Y49haiYT1ULTf5ugEGbCNe7wjLzmI%3D")
         .then(response=>response.json())
         .then(data=>{
@@ -659,7 +637,9 @@ export const CapCol: React.FC<CapColprops> = ({ capPicks, setCapPicks, enPicks }
     return (
     <>
     <div className="ms-Grid-row">
-        <h3 className="root-141 subtitle">Cap</h3>
+        <Text variant="large" className="bold">Cap</Text>
+    </div>
+    <div className="ms-Grid-row">
         <Dropdown
             label="Provider"
             onChange={(e, i) => {if (i && typeof i.key==='string') {
@@ -742,11 +722,7 @@ export const CapCol: React.FC<CapColprops> = ({ capPicks, setCapPicks, enPicks }
 }
 
 
-interface RecColprops {
-    setRecPicks: React.Dispatch<React.SetStateAction<any>>;
-    recPicks: any;
-    enPicks: any;
-    }
+
 
 export const RecCol: React.FC<RecColprops> = ({ recPicks, setRecPicks, enPicks }) => {
     const [allChoices, setAllChoices] = useState();
@@ -814,7 +790,9 @@ export const RecCol: React.FC<RecColprops> = ({ recPicks, setRecPicks, enPicks }
     return (
     <>
     <div className="ms-Grid-row">
-        <h3 className="root-141 subtitle">Rec</h3>
+        <Text variant="large" className="bold">Rec</Text>
+        </div>
+    <div className="ms-Grid-row">
         <Dropdown
             label="Provider"
             onChange={(e, i) => {if (i && typeof i.key==='string') {
@@ -896,11 +874,6 @@ export const RecCol: React.FC<RecColprops> = ({ recPicks, setRecPicks, enPicks }
     )
 }
 
-interface ElccColprops {
-    setElccPicks: React.Dispatch<React.SetStateAction<any>>;
-    elccPicks: any;
-    enPicks: any;
-    }
 
 export const ElccCol: React.FC<ElccColprops> = ({ elccPicks, setElccPicks, enPicks }) => {
     const [allChoices, setAllChoices] = useState();
@@ -967,7 +940,9 @@ export const ElccCol: React.FC<ElccColprops> = ({ elccPicks, setElccPicks, enPic
     return (
     <>
     <div className="ms-Grid-row">
-        <h3 className="root-141 subtitle">Elcc</h3>
+        <Text variant="large" className="bold">Elcc</Text>
+        </div>
+    <div className="ms-Grid-row">
         <Dropdown
             label="Provider"
             onChange={(e, i) => {if (i && typeof i.key==='string') {
