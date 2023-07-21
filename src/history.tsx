@@ -1,16 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Stack, Text, FontWeights, ITextStyles, initializeIcons, Pivot, PivotItem} from '@fluentui/react';
-import { useBoolean } from '@fluentui/react-hooks';
-import { GroupCard, SmCard } from './Cards'
-import { GraphModal } from './graphmodal';
+import React, { useEffect, useState } from 'react';
+
 import './App.css';
-import { ProdSpecs, ProdLoad, PPACard, BasisCard, InflationCard, DiscountCard, ReactiveCard, EnergyCol, CapCol, RecCol, ElccCol } from './Chunks';
-import { DefaultButton } from '@fluentui/react/lib/Button';
 import { historyprops } from './interfaces'
-import { Route, Routes} from "react-router-dom"
 import {
-    PresenceBadgeStatus,
-    Avatar,
     DataGridBody,
     DataGridRow,
     DataGrid,
@@ -22,45 +14,37 @@ import {
     createTableColumn,
     FluentProvider,
     webLightTheme,
-    Link
+    Link,
+    Text,
+    Button
   } from "@fluentui/react-components";
+type ItemLabel = {
+label: string
+}
 
-export const History: React.FunctionComponent<historyprops> = ({apiBase}) => {
-    type ItemLabel = {
-        label: string
-    }
-        
-    type historydatatype = {
-        project: ItemLabel;
-        jobname: ItemLabel;
-        status: ItemLabel;
-        excel_link: ItemLabel;
-        id: ItemLabel;
-        [key: string]: unknown
-    }
+type historydatatype = {
+    project: ItemLabel;
+    jobname: ItemLabel;
+    status: ItemLabel;
+    excel_link: ItemLabel;
+    id: ItemLabel;
+    [key: string]: unknown
+}
 
 
-    const [historydata, setHistorydata] = useState<historydatatype[]>([
-        {
-            project: {label:'abc'},
-            jobname: {label:'bcd'},
-            status: {label:'cde'},
-            excel_link: {label:'def'},
-            id:{label:'edf'}
-        }
-    ]);
-    const apiPollerTimer = useRef<NodeJS.Timeout>()
+export const History: React.FunctionComponent<historyprops> = ({apiBase, showModal, waitingOnApi, pollApiTime}) => {
 
+    const [historydata, setHistorydata] = useState<historydatatype[]>([]);
     const columns: TableColumnDefinition<historydatatype>[] = [
         createTableColumn<historydatatype>({
           columnId: "project",
           renderHeaderCell: () => {
-            return "Project";
+            return (<><Text weight="bold">Project</Text></>);
           },
           renderCell: (item:any) => {
             return (
               <TableCellLayout>
-                {item.label}
+                {item.project.label}
               </TableCellLayout>
             );
           },
@@ -68,12 +52,12 @@ export const History: React.FunctionComponent<historyprops> = ({apiBase}) => {
         createTableColumn<historydatatype>({
             columnId: "jobname",
             renderHeaderCell: () => {
-              return "Job Name";
+              return (<><Text weight="bold">Job Name</Text></>);
             },
             renderCell: (item:any) => {
               return (
                 <TableCellLayout>
-                  {item.label}
+                  {item.jobname.label}
                 </TableCellLayout>
               );
             },
@@ -81,12 +65,22 @@ export const History: React.FunctionComponent<historyprops> = ({apiBase}) => {
           createTableColumn<historydatatype>({
             columnId: "status",
             renderHeaderCell: () => {
-              return "Status";
+              return (<><Text weight="bold">Graphs</Text></>);
             },
-            renderCell: (item:any) => {
+            renderCell: (item) => {
               return (
                 <TableCellLayout>
-                  {item.label}
+                  {(item.status.label==="complete") && 
+                      <Button appearance="primary" 
+                        onClick={()=>{
+                          waitingOnApi.current=item.id.label
+                          pollApiTime.current=1000
+                          showModal()
+                        }}
+                        >Graphs</Button>
+
+
+                  }
                 </TableCellLayout>
               );
             },
@@ -96,13 +90,14 @@ export const History: React.FunctionComponent<historyprops> = ({apiBase}) => {
             renderHeaderCell: () => {
               return "Summary";
             },
-            renderCell: (item:any) => {
+            renderCell: (item) => {
               return (
                 <TableCellLayout>
-                    <Link href={item.label}>
+                  {item.excel_link.label!=='' &&
+                    <Link href={item.excel_link.label}>
                         Excel download
                     </Link>
-
+            }
                 </TableCellLayout>
               );
             },
@@ -141,7 +136,7 @@ export const History: React.FunctionComponent<historyprops> = ({apiBase}) => {
         <DataGrid
             items={historydata }
             columns={columns}
-            getRowId={(item) => item.label}
+            getRowId={(item) => item.id.label}
         >
         <DataGridHeader>
             <DataGridRow>

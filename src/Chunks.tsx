@@ -376,7 +376,7 @@ export const ReactiveCard: React.FC<paramsprops> = ({ allParams, setAllParams })
             </div>
             <div className="ms-Grid-col ms-sm3">
             <NumInput
-                        label="Reactive Losses"
+                        label="Reactive Losses (%)"
                         tooltip="The losses for reactive as percent"
                         onChange={(e,i)=>{setAllParams({...allParams, reactive_losses:i})}}
                         min={0} 

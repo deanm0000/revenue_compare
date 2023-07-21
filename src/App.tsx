@@ -118,7 +118,7 @@ export const App: React.FunctionComponent = () => {
     <header className="myheader">
       <Stack>
         <Stack.Item align="start"> 
-          <img src="/favicon.ico"/>
+          <img src="/favicon.ico" alt=""/>
           <Text variant="xLarge">Revenue Tool</Text>
         </Stack.Item>
         <Stack.Item align="end">
@@ -133,7 +133,8 @@ export const App: React.FunctionComponent = () => {
         </Stack>
     </header>
     <Routes>
-    <Route path="/" element={<>
+    <Route path="/" element={
+    <>
       <div className="ms-Grid" dir="ltr">
         <div className="ms-Grid-row">
           <div className="ms-Grid-col ms-sm12">
@@ -143,6 +144,7 @@ export const App: React.FunctionComponent = () => {
                   <div className="ms-Grid-col ms-sm9">
                     <TextField 
                       label="Name of job"
+                      placeholder="Type in a name for this job"
                       onChange={(e, text) => setAllParams({...allParams, jobname:text})}
                       />
                   </div>
@@ -219,7 +221,8 @@ export const App: React.FunctionComponent = () => {
                   // pollApiTime.current=3000
                   // showModal()
                   // check dataset params for area being filled in
-                  if ((enPicks.Area !== null) && (capPicks.Area !== null) && (recPicks.Area !== null) && (elccPicks.Area !== null) && (allParams.prodfile !== null) && (allParams.prodcol !== null)) {
+                  if ((enPicks.Area !== null) && (capPicks.Area !== null) && (recPicks.Area !== null || (recPicks.provider==="woodmac" && recPicks.State!==null)) && 
+                      (elccPicks.Area !== null) && (allParams.prodfile !== null) && (allParams.prodcol !== undefined)) {
                     try {
                       const response = await fetch(apiBase.concat("/newjob"), {
                         method: 'POST',
@@ -253,18 +256,21 @@ export const App: React.FunctionComponent = () => {
           </div>          
         </div>
       </div>
-      <div>
+
+    </>}
+    />
+    <Route path="/history" element = {<History apiBase={apiBase} showModal={showModal} waitingOnApi={waitingOnApi} pollApiTime={pollApiTime}/>}/>
+    </Routes>
+    <div>
         <GraphModal
           isOpen={isModalOpen}
           onDismiss={hideModal}
           monthData={monthData}
           duckData={duckData}
           hideModal={hideModal}
+          waitingOnApi={waitingOnApi}
         />
       </div>
-    </>}/>
-    <Route path="/history" element = {<History apiBase={apiBase}/>}/>
-    </Routes>
     </>
   );
 };

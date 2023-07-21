@@ -163,7 +163,7 @@ const AllMonths = [
     }
 ]
 
-export const GraphModal: React.FC<GraphModalsprops> = ({isOpen, onDismiss, monthData, duckData, hideModal }) => {
+export const GraphModal: React.FC<GraphModalsprops> = ({isOpen, onDismiss, monthData, duckData, hideModal, waitingOnApi }) => {
     let modalcontent
     const [TBMWh, {toggle:toggleTBMWh}] = useBoolean(true)
     const [MonthNm, setMonthNm] = useState("July")
@@ -370,7 +370,9 @@ export const GraphModal: React.FC<GraphModalsprops> = ({isOpen, onDismiss, month
         isModeless={true}
     >
         <Text>Results</Text>
-        <IconButton style={{position:'absolute', top:0, right:0, zIndex:100}} iconProps={{ iconName: 'ChromeClose'}} onClick={hideModal}/>
+        <IconButton style={{position:'absolute', top:0, right:0, zIndex:100}} iconProps={{ iconName: 'ChromeClose'}} onClick={()=>{
+            hideModal()
+            waitingOnApi.current=null}}/>
         {modalcontent}
     </Modal>
     </>)

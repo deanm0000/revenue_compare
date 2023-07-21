@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {MutableRefObject} from 'react';
 
 export interface allparamstypes {
     project?: string | null;
@@ -100,11 +100,14 @@ export interface GraphModalsprops  {
     monthData: month_summprops|null
     duckData: duckprops|null
     hideModal: ()=> void
+    waitingOnApi: MutableRefObject<any>
 }
 
 export interface historyprops  {
     apiBase: string
-
+    showModal: ()=> void
+    waitingOnApi: MutableRefObject<any>
+    pollApiTime: MutableRefObject<any>
 }
 
 export interface paramsprops {
